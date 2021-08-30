@@ -1,5 +1,5 @@
 <launch>
-  <arg name="imu_topic" default="/sensing/imu/tamagawa/imu_raw"/>
+  <arg name="imu_topic" default="/xsens/imu"/>
   <node pkg="clock_publisher" exec="imu_clock_converter_node" name="imu_clock_converter" output="screen">
     <remap from="imu" to="$(var imu_topic)"/>
   </node>
