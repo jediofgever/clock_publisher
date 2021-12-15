@@ -16,9 +16,7 @@
 #define CLOCK_PUBLISHER_CLOCK_PUBLISHER_H 
 
 #include <string>
-
 #include <rclcpp/rclcpp.hpp>
-
 #include <rosgraph_msgs/msg/clock.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 

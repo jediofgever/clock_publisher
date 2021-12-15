@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #include <clock_publisher/imu_clock_converter.hpp>
-
 #include <rclcpp/create_timer.hpp>
 
 
@@ -21,8 +20,8 @@ void ImuClockConverter::onImuMsg(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
   rosgraph_msgs::msg::Clock clock;
   clock.clock = msg->header.stamp;
-  // std::cerr << std::fixed << rclcpp::Time(clock.clock).seconds() << std::endl;
-  clock_pub_->publish(clock); 
+  std::cerr << std::fixed << rclcpp::Time(clock.clock).seconds() << std::endl;
+  clock_pub_->publish(clock);
 }
 
 ImuClockConverter::ImuClockConverter(const rclcpp::NodeOptions & node_options)
@@ -30,7 +29,14 @@ ImuClockConverter::ImuClockConverter(const rclcpp::NodeOptions & node_options)
 {
   clock_pub_ = this->create_publisher<rosgraph_msgs::msg::Clock>("/clock", 1);
 
-  imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>("imu", 1, std::bind(&ImuClockConverter::onImuMsg, this, std::placeholders::_1));
+  rclcpp::QoS qos = rclcpp::QoS(10)
+    .reliability(RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT)
+    .durability(RMW_QOS_POLICY_DURABILITY_VOLATILE);
+
+  imu_sub_ =
+    this->create_subscription<sensor_msgs::msg::Imu>(
+    "imu", qos,
+    std::bind(&ImuClockConverter::onImuMsg, this, std::placeholders::_1));
 
 }
 

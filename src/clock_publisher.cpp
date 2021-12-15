@@ -20,8 +20,8 @@ void ClockPublisher::onTimer()
 {
   rosgraph_msgs::msg::Clock clock;
   clock.clock = this->now();
-  // std::cerr << std::fixed << rclcpp::Time(clock.clock).seconds() << std::endl;
-  clock_pub_->publish(clock); 
+  std::cerr << std::fixed << rclcpp::Time(clock.clock).seconds() << std::endl;
+  clock_pub_->publish(clock);
 }
 
 ClockPublisher::ClockPublisher(const rclcpp::NodeOptions & node_options)
@@ -33,7 +33,7 @@ ClockPublisher::ClockPublisher(const rclcpp::NodeOptions & node_options)
   // Timer
   auto timer_callback = std::bind(&ClockPublisher::onTimer, this);
   auto period = std::chrono::duration_cast<std::chrono::nanoseconds>(
-    std::chrono::duration<double>(1.0/static_cast<double>(rate)));
+    std::chrono::duration<double>(1.0 / static_cast<double>(rate)));
 
   timer_ = std::make_shared<rclcpp::GenericTimer<decltype(timer_callback)>>(
     this->get_clock(), period, std::move(timer_callback),
